@@ -8,11 +8,13 @@ class SeedDump
 
       limit = retrieve_limit_value(env)
       append = retrieve_append_value(env)
+      foreign_key = retrieve_foreign_key_value(env)
       models.each do |model|
         model = model.limit(limit) if limit.present?
 
         SeedDump.dump(model,
                       append: append,
+                      foreign_key: foreign_key,
                       batch_size: retrieve_batch_size_value(env),
                       exclude: retrieve_exclude_value(env),
                       file: retrieve_file_value(env),
@@ -21,6 +23,7 @@ class SeedDump
         append = true # Always append for every model after the first
                       # (append for the first model is determined by
                       # the APPEND environment variable).
+        foreign_key = true
       end
     end
 
@@ -83,6 +86,11 @@ class SeedDump
     # false if no value exists.
     def retrieve_append_value(env)
       parse_boolean_value(env['APPEND'])
+    end
+
+
+    def retrieve_foreign_key_value(env)
+      parse_boolean_value(env['FK'])
     end
 
     # Internal: Returns a Boolean indicating whether the value for the "IMPORT"
