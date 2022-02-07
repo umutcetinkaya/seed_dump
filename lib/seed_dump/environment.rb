@@ -9,6 +9,10 @@ class SeedDump
       limit = retrieve_limit_value(env)
       append = retrieve_append_value(env)
       foreign_key = retrieve_foreign_key_value(env)
+
+      habtm, non_habtm = models.partition {|m| m.name =~ /^HABTM_/}
+      models = non_habtm + habtm.uniq { |m| m.table_name }
+
       models.each do |model|
         model = model.limit(limit) if limit.present?
 
