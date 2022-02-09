@@ -12,9 +12,9 @@ class SeedDump
 
       habtm, non_habtm = models.partition {|m| m.name =~ /^HABTM_/}
       models = non_habtm + habtm.uniq { |m| m.table_name.singularize }
-      models = models == "UserRoles" ? "UsersRole" : models
 
       models.each do |model|
+        model = model == "UserRoles" ? "UsersRole" : model
         model = model.limit(limit) if limit.present?
 
         SeedDump.dump(model,
