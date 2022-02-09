@@ -15,7 +15,7 @@ class SeedDump
 
       models.each do |model|
         puts model
-        delay(5)
+        sleep(5)
         model = model.limit(limit) if limit.present?
 
         SeedDump.dump(model,
