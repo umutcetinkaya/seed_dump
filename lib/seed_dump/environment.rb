@@ -10,8 +10,6 @@ class SeedDump
       append = retrieve_append_value(env)
       foreign_key = retrieve_foreign_key_value(env)
 
-      habtm, non_habtm = models.partition {|m| m.name =~ /^HABTM_/}
-      models = non_habtm + habtm.uniq { |m| m.table_name }.collect {|x| x.strip.underscore.singularize.camelize.constantize }
 
       models.each do |model|
         model = model.limit(limit) if limit.present?
@@ -67,7 +65,7 @@ class SeedDump
       # model classes in the project.
       models = if models_env
                  models_env.split(',')
-                           .collect {|x| x.strip.underscore.singularize.camelize.constantize }
+                           .collect {|x| x.name =~ /^HABTM_/ ? x.table_name.strip.underscore.singularize.camelize.constantize : x.strip.underscore.singularize.camelize.constantize  }
                else
                  ActiveRecord::Base.descendants
                end
