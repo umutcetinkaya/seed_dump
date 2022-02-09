@@ -86,7 +86,7 @@ class SeedDump
                              :enumerable_enumeration
                            end
       puts "#5"
-
+        puts records                      
       send(enumeration_method, records, io, options) do |record_strings, last_batch|
         io.write(record_strings.join(",\n  "))
 
