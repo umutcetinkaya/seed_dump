@@ -5,17 +5,20 @@ class SeedDump
       Rails.application.eager_load!
 
       models = retrieve_models(env) - retrieve_models_exclude(env)
-
+      puts models
+      puts "-------------------------------"
       limit = retrieve_limit_value(env)
       append = retrieve_append_value(env)
       foreign_key = retrieve_foreign_key_value(env)
 
       habtm, non_habtm = models.partition {|m| m.name =~ /^HABTM_/}
       models = non_habtm + habtm.uniq { |m| m.table_name }
-
+      puts models
+      puts "-------------------------------"
       models.each do |model|
         puts model
-        sleep(5)
+        puts "-------------------------------"
+
         model = model.limit(limit) if limit.present?
 
         SeedDump.dump(model,
