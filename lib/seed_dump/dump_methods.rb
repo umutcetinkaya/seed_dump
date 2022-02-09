@@ -6,7 +6,7 @@ class SeedDump
       return nil if records.count == 0
 
       io = open_io(options)
-
+      puts "#1"
       write_records_to_io(records, io, options)
 
       ensure
@@ -68,10 +68,13 @@ class SeedDump
     end
 
     def write_records_to_io(records, io, options)
-      options[:exclude] ||= []
+      options[:exclude] ||= [:id, :created_at, :updated_at]
+      puts "#2"
 
       method = options[:import] ? 'import' : 'create!'
       io.write("#{model_for(records)}.#{method}(")
+      puts "#3"
+
       if options[:import]
         io.write("[#{attribute_names(records, options).map {|name| name.to_sym.inspect}.join(', ')}], ")
       end
@@ -82,14 +85,17 @@ class SeedDump
                            else
                              :enumerable_enumeration
                            end
+      puts "#5"
 
       send(enumeration_method, records, io, options) do |record_strings, last_batch|
         io.write(record_strings.join(",\n  "))
 
         io.write(",\n  ") unless last_batch
       end
+      puts "#6"
 
       io.write("\n]#{active_record_import_options(options)})\n")
+      puts "#7"
 
       if options[:file].present?
         nil
@@ -111,6 +117,7 @@ class SeedDump
                         else
                           records[0].attribute_names
                         end
+      puts "#4"
 
       attribute_names.select {|name| !options[:exclude].include?(name.to_sym)}
     end
