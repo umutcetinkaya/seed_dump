@@ -12,7 +12,7 @@ class SeedDump
       foreign_key = retrieve_foreign_key_value(env)
 
       habtm, non_habtm = models.partition {|m| m.name =~ /^HABTM_/}
-      models = non_habtm + habtm.uniq { |m| m.table_name }
+      models = non_habtm 
       puts models
       puts "-------------------------------"
       models.each do |model|
