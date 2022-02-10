@@ -32,7 +32,7 @@ class SeedDump
 
     def dump_attribute_new(attribute, value, options)
       create_row =  attribute.include?("_id") ? "#{attribute}: 1" : "#{attribute}: #{value_to_s(value)}"
-      options[:import] ? value_to_s(value) : a
+      options[:import] ? value_to_s(value) : create_row
     end
 
     def value_to_s(value)
